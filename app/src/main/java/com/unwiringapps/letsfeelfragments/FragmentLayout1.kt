@@ -10,7 +10,7 @@ import android.widget.Button
 
 
 
-interface OnRemoveButtonTapListener          //using interface, declared, now this fragment will call it and main activity will define it
+interface OnRemoveButtonTapListener          //using interface, declared, now this fragment will call it and main activity will define it, we are using interface to communicate between activity and fragments, that is when button on fragment is clicked it says activity to remove the fragments.
 {
     fun onRemoveButtonTapped ()
 }
@@ -18,7 +18,7 @@ interface OnRemoveButtonTapListener          //using interface, declared, now th
 
 class FragmentLayout1 : Fragment() {
 
-    private lateinit var caller : OnRemoveButtonTapListener
+    private lateinit var caller : OnRemoveButtonTapListener  // as fragment will make the call, so here we are declaring the lateinit variable
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,13 +32,20 @@ class FragmentLayout1 : Fragment() {
         val myButton = fragmentView1.findViewById<Button>(R.id.button2)
 
         myButton.setOnClickListener{
-          caller.onRemoveButtonTapped()
+          caller.onRemoveButtonTapped()   // when button is clicked, i want the caller to do the call, hey ? remove!! me. and then the mainactivity will listen this.
         }
 
         return fragmentView1
     }
 
+     /*
+     this is the companion object which returns the fragment, and it basically return my fragment
+     This companion object makes sure, your object is only one instance of it, so if you have multiple
+    fragments or populating multiple of these, you always make sure that there is only one copy of that
+    */
+
     companion object {
+
 
         fun newInstance(): FragmentLayout1 {
             return FragmentLayout1()
@@ -46,6 +53,9 @@ class FragmentLayout1 : Fragment() {
         }
 
     }
+
+    // we need "onAttach" as we want to initialise the "caller"
+    //ONATTACH is when you attach the fragments, and the good news is it knows where it has attached it.
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
