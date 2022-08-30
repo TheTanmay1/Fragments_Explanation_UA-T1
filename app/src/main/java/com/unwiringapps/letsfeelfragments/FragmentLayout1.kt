@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -79,6 +80,10 @@ class FragmentLayout1 : Fragment() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
             (holder.itemView as TextView).text = array[position]
+
+            holder.itemView.setOnClickListener {
+                Toast.makeText(holder.itemView.context,"${array[position]} is clicked", Toast.LENGTH_LONG).show()
+            }
 
         }
 
