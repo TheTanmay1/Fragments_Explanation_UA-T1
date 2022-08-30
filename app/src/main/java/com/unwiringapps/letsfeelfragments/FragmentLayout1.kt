@@ -6,43 +6,50 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
-
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 interface OnRemoveButtonTapListener          //using interface, declared, now this fragment will call it and main activity will define it, we are using interface to communicate between activity and fragments, that is when button on fragment is clicked it says activity to remove the fragments.
 {
-    fun onRemoveButtonTapped ()
+    fun onRemoveButtonTapped()
 }
 
 
 class FragmentLayout1 : Fragment() {
 
-    private lateinit var caller : OnRemoveButtonTapListener  // as fragment will make the call, so here we are declaring the lateinit variable
+    private lateinit var caller: OnRemoveButtonTapListener  // as fragment will make the call, so here we are declaring the lateinit variable
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?): View?
-
-    {
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        val fragmentView1 =  inflater.inflate(R.layout.fragment_layout1, container, false)
+        val fragmentView1 = inflater.inflate(R.layout.fragment_layout1, container, false)
 
-        val myButton = fragmentView1.findViewById<Button>(R.id.button2)
+        val recyclerView = fragmentView1.findViewById<RecyclerView>(R.id.recycle1)
 
-        myButton.setOnClickListener{
-          caller.onRemoveButtonTapped()   // when button is clicked, i want the caller to do the call, hey ? remove!! me. and then the mainactivity will listen this.
-        }
+        recyclerView.layoutManager = LinearLayoutManager(activity as Context)
 
-        return fragmentView1
+        val items = arrayOf("Great India", "Canada", "USA", "MEXICO", "CHILE")
+
+//        val MyAdapter =  ArrayAdapter<String>(activity as Context, R.layout.row)
+
+
+        recyclerView.adapter = MyAdapter(items)
+
+            return fragmentView1
     }
 
-     /*
-     this is the companion object which returns the fragment, and it basically return my fragment
-     This companion object makes sure, your object is only one instance of it, so if you have multiple
-    fragments or populating multiple of these, you always make sure that there is only one copy of that
-    */
+    /*
+    this is the companion object which returns the fragment, and it basically return my fragment
+    This companion object makes sure, your object is only one instance of it, so if you have multiple
+   fragments or populating multiple of these, you always make sure that there is only one copy of that
+   */
 
     companion object {
 
@@ -54,15 +61,30 @@ class FragmentLayout1 : Fragment() {
 
     }
 
-    // we need "onAttach" as we want to initialise the "caller"
-    //ONATTACH is when you attach the fragments, and the good news is it knows where it has attached it.
+    class MyViewHolder(
+        inflater: LayoutInflater,
+        parent: ViewGroup
+    ) : RecyclerView.ViewHolder(inflater.inflate(R.layout.row, parent, false))
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnRemoveButtonTapListener)
-        {
-            caller = context
+
+    internal inner class MyAdapter(private val array: Array<String>) :
+        RecyclerView.Adapter<MyViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+
+            val inflater = LayoutInflater.from(parent.context)
+
+            return MyViewHolder(inflater, parent)
         }
+
+        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
+            (holder.itemView as TextView).text = array[position]
+
+        }
+
+        override fun getItemCount() = array.size
+
     }
+
 
 }

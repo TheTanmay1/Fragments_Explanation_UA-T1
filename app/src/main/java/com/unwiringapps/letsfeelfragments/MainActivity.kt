@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), OnRemoveButtonTapListener {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.framelayout1, FragmentLayout1.newInstance(), "MyTag").commit()   // this .newInstance() comes from the companion object created in fragment layout making sure that there will be only one instance.
                 Toast.makeText(this,"Fragment 1 is Born \uD83D\uDE0D", Toast.LENGTH_LONG).show()
+
             }
         }
     }
